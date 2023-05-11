@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Authorization from "./Authorization";
 import Header from "./Header";
 import { login } from "../utils/auth";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login({ handleLogin }) {
   const [formValue, setFormValue] = useState({
@@ -39,7 +39,13 @@ function Login({ handleLogin }) {
 
   return (
     <>
-      <Header headerButton={"Регистрация"} />
+      <Header headerButton={
+        <Link 
+          to='/sign-up'
+          className="button button_type_header"
+        >Регистрация</Link>
+      } 
+      />
       <Authorization
         title={"Вход"}
         buttonName={"Войти"}

@@ -29,7 +29,12 @@ function Register() {
 
   return (
     <>
-      <Header headerButton={"Вход"} />
+      <Header headerButton={
+        <Link 
+          to='/sign-in'
+          className="button button_type_header"
+        >Вход</Link>} 
+      />
       <Authorization
         title={"Регистрация"}
         buttonName={"Зарегистрироваться"}
