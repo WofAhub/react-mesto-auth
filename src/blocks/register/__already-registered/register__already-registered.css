@@ -1,0 +1,8 @@
+.register__already-registered {
+  /* Экран */
+  display: flex;
+
+  /* Отступы */
+  margin: 0;
+  padding: 0;
+}

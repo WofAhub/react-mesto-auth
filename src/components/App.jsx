@@ -1,13 +1,19 @@
 import Main from './Main';
 import Footer from './Footer';
-import Header from './Header';
 import EditProfilePopup from './EditProfilePopup';
 import ImagePopup from './ImagePopup';
 import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
+
+import Login from './Login';
+import Register from './Register';
+
+import {BrowserRouter, Route, Routes, useNavigate, Navigate} from 'react-router-dom';
 import React from 'react';
 import { api } from '../utils/Api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
+import * as auth from '../utils/auth.js';
+import ProtectedRoute from './ProtectedRoute';
 
 function App() {
 
@@ -17,6 +23,33 @@ function App() {
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
+
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const navigate = useNavigate();
+
+  function handleLogin() {
+    setLoggedIn(true);
+  }
+
+  React.useEffect(() => {
+    handleTokenCheck();
+  }, [])
+
+  function handleTokenCheck() {
+    if(localStorage.getItem('jwt')) {
+      const jwt = localStorage.getItem('jwt');
+      auth.checkToken(jwt)
+      .then((res) => {
+        if(res) {
+          setLoggedIn(true);
+          navigate('/main', {replace: true}) 
+        }
+      })
+      .catch((err) => {
+        console.log(`Ошибка в App, handleTokenCheck: ${err}`);
+      })
+    }
+  }
 
   // установка смены аватара
   function handleEditAvatarClick() {
@@ -125,16 +158,40 @@ function App() {
     <CurrentUserContext.Provider value={currentUser || ''}>
       <div className="root">
         <div className="page">
-          <Header />
-          <Main
-            cards={cards}
-            onEditAvatar={handleEditAvatarClick}
-            onEditProfile={handleEditProfileClick}
-            onAddPlace={handleAddPlaceClick}
-            onCardClick={handleCardClick}
-            onCardLike={handleCardLike}
-            onCardDelete={handleCardDelete}
-          />
+          <BrowserRouter>
+            <Routes>
+              <Route 
+                path='/sign-in'
+                element={
+                <Login 
+                  handleLogin={handleLogin}
+                />}
+              />
+              <Route
+                path="/sign-up"
+                element={<Register />}
+              />
+              <Route 
+                path="*"
+                element={loggedIn ? <Navigate to='/main' replace /> : <Navigate to='/sign-in' replace /> }
+              />
+              <ProtectedRoute 
+                path='/main'
+                element={
+                  <Main
+                    cards={cards}
+                    onEditAvatar={handleEditAvatarClick}
+                    onEditProfile={handleEditProfileClick}
+                    onAddPlace={handleAddPlaceClick}
+                    onCardClick={handleCardClick}
+                    onCardLike={handleCardLike}
+                    onCardDelete={handleCardDelete}
+                  />
+                }
+              />
+            </Routes>
+          </BrowserRouter>
+          
           <Footer />
           <EditProfilePopup 
             isOpen={isEditProfilePopupOpen} 

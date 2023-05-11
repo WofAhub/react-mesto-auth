@@ -1,12 +1,17 @@
 import React from "react";
 import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
+import Header from "./Header";
 
 function Main ({cards, onEditAvatar, onCardClick, onCardLike, onCardDelete, onEditProfile, onAddPlace}) {
 
   const currentUserContext = React.useContext(CurrentUserContext)
 
   return (
+    <>
+    <Header
+      headerButton={'Выход'}
+    />
     <main className="content">
       <section className="profile">
   
@@ -48,6 +53,7 @@ function Main ({cards, onEditAvatar, onCardClick, onCardLike, onCardDelete, onEd
         })}
       </section>
     </main>
+    </>
   )
 }
 

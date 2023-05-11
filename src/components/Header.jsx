@@ -1,16 +1,16 @@
 import React from "react";
-import logo from "../images/logo.svg"
+import { Link } from "react-router-dom";
+import logo from "../images/logo.svg";
 
-function Header () {
+function Header({ headerButton }) {
   return (
     <header className="header">
-      <img
-        className="header__logo"
-        src={logo}
-        alt="лого"
-      />
+      <img className="header__logo" src={logo} alt="лого" />
+      <Link to='/sign-up' className="button button_type_header">
+        {headerButton}
+      </Link>
     </header>
-  )
+  );
 }
 
 export default Header;
