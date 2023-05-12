@@ -4,11 +4,12 @@ import Header from "./Header";
 import { login } from "../utils/auth";
 import { Link, useNavigate } from "react-router-dom";
 
-function Login({ handleLogin }) {
+function Login({handleLogin}) {
   const [formValue, setFormValue] = useState({
-    username: "",
+    email: "",
     password: ""
   });
+  const navigate = useNavigate();
 
   function handleChange(evt) {
     const { name, value } = evt.target;
@@ -18,8 +19,6 @@ function Login({ handleLogin }) {
       [name]: value
     });
   }
-
-  const navigate = useNavigate();
 
   function handleSubmit(evt) {
     evt.preventDefault();
@@ -34,7 +33,9 @@ function Login({ handleLogin }) {
           navigate("/main", { replace: true });
         }
       })
-      .catch(err => console.log(err));
+      .catch((err) => {
+        console.log(`Ошибка в Login, handleSubmit: ${err}`);
+      });
   }
 
   return (
@@ -58,6 +59,7 @@ function Login({ handleLogin }) {
           className="authorization__input"
           placeholder="Email"
           onChange={handleChange}
+          value={formValue.email}
         />
         <input
           id="password"
@@ -66,6 +68,7 @@ function Login({ handleLogin }) {
           className="authorization__input"
           placeholder="Password"
           onChange={handleChange}
+          value={formValue.password}
         />
       </Authorization>
     </>

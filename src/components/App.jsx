@@ -1,3 +1,4 @@
+// components
 import Main from "./Main";
 import Footer from "./Footer";
 import EditProfilePopup from "./EditProfilePopup";
@@ -5,47 +6,53 @@ import ImagePopup from "./ImagePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
 import AddPlacePopup from "./AddPlacePopup";
 
+// components-authorization
 import Login from "./Login";
 import Register from "./Register";
 
-import {
-  Route,
-  Routes,
-  useNavigate,
-  Navigate,
-} from "react-router-dom";
+// react and utils
+import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
 import React from "react";
 import { api } from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import * as auth from "../utils/auth.js";
+import { checkToken } from "../utils/auth";
 import ProtectedRoute from "./ProtectedRoute";
+import InfoTooltip from "./InfoTooltip";
 
+// function App
 function App() {
+  // const popups
   const [isEditAvatarPopupOpen, isSetEditAvatarPopupOpen] =
     React.useState(false);
   const [isEditProfilePopupOpen, isSetEditProfilePopupOpen] =
     React.useState(false);
   const [isAddPlacePopupOpen, isSetAddPlacePopupOpen] = React.useState(false);
+
+  // const api
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
 
+  // const authorization (авторизация)
   const [loggedIn, setLoggedIn] = React.useState(false);
+  const [isInfoTooltipPopupOpen, isSetInfoTooltipPopupOpen] = React.useState(false);
   const navigate = useNavigate();
 
+  // успешный вход
   function handleLogin() {
     setLoggedIn(true);
   }
 
+  // проверка токена эффект
   React.useEffect(() => {
     handleTokenCheck();
   }, []);
 
+  // проверка токена
   function handleTokenCheck() {
     if (localStorage.getItem("jwt")) {
       const jwt = localStorage.getItem("jwt");
-      auth
-        .checkToken(jwt)
+      checkToken(jwt)
         .then((res) => {
           if (res) {
             setLoggedIn(true);
@@ -58,22 +65,27 @@ function App() {
     }
   }
 
-  // установка смены аватара
+  // открытие попапа информации
+  function handleInfoTooltipOpen() {
+    isSetInfoTooltipPopupOpen(true);
+  }
+
+  // смена аватара
   function handleEditAvatarClick() {
     isSetEditAvatarPopupOpen(true);
   }
 
-  // установка смены имени и описания
+  // смена имени и описания
   function handleEditProfileClick() {
     isSetEditProfilePopupOpen(true);
   }
 
-  // установка добавления карточки
+  // добавление карточки
   function handleAddPlaceClick() {
     isSetAddPlacePopupOpen(true);
   }
 
-  // установка нажатия по карточке
+  // нажатие по карточке
   function handleCardClick(card) {
     setSelectedCard(card);
   }
@@ -83,10 +95,11 @@ function App() {
     isSetEditAvatarPopupOpen(false);
     isSetEditProfilePopupOpen(false);
     isSetAddPlacePopupOpen(false);
+    isSetInfoTooltipPopupOpen(false);
     setSelectedCard({});
   }
 
-  // закрыть все попапы
+  // запрос обновления информации юзера
   function handleUpdateUser(data) {
     api
       .editUserInfo(data)
@@ -112,6 +125,7 @@ function App() {
       });
   }
 
+  // запрос добавления карточки
   function handleAddPlace(data) {
     api
       .createCardByPopup(data)
@@ -221,7 +235,15 @@ function App() {
             onClose={closeAllPopups}
             onAddPlace={handleAddPlace}
           />
-          <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+          <ImagePopup 
+            card={selectedCard} 
+            onClose={closeAllPopups} 
+          />
+          <InfoTooltip
+            isOpen={isInfoTooltipPopupOpen}
+            onClose={closeAllPopups}
+            isSuccess={handleInfoTooltipOpen}
+          />
         </div>
       </div>
     </CurrentUserContext.Provider>

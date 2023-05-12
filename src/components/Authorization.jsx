@@ -16,7 +16,7 @@ function Authorization({
             <fieldset className="authorization__form-fieldset">
               {children}
             </fieldset>
-            <button className="button button_type_authorization">
+            <button type='submit' className="button button_type_authorization">
               {buttonName}
             </button>
           </form>

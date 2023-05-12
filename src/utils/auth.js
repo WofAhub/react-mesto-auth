@@ -1,21 +1,25 @@
-export const fetchUrlAuth = 'https://auth.nomoreparties.co';  
+export const fetchUrlAuth = 'https://auth.nomoreparties.co';
+
+// получаем json, если ответ пришел
+function checkResponse (res) {
+  if (res.ok) {
+    return res.json();
+  } else {
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
+}
   
 export const register = (email, password) => {
   return fetch(`${fetchUrlAuth}/signup`, {
     method: 'POST',
     headers: {
+      'Accept': 'application/json',
       "Content-Type": "application/json"
     },
     body: JSON.stringify({email, password})
   })
-  .then((response) => {
-    return response.json();
-  })
-  .then((res) => {
-    return res;
-  })
-  .catch((err) => console.log(err));
-};
+  .then(res => checkResponse(res)) 
+}
 
 export const login = (email, password) => {
   return fetch(`${fetchUrlAuth}/signin`, {
@@ -25,11 +29,12 @@ export const login = (email, password) => {
     },
     body: JSON.stringify({email, password}) 
   })
-  .then((response => response.json()))
+  .then(res => checkResponse(res))
   .then((data) => {
-    if (data.user){
-      localStorage.setItem('jwt', data.jwt);
-      return data;
+    if (data.token){
+      const token = data.token;
+      localStorage.setItem('jwt', token);
+      return token;
     }
   })
   .catch(err => console.log(err))
@@ -44,6 +49,6 @@ export const checkToken = (token) => {
       'Authorization': `Bearer ${token}`
     }
   })
-  .then(res => res.json())
+  .then(res => checkResponse(res))
   .then(data => data)
 }

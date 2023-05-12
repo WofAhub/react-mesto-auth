@@ -22,8 +22,12 @@ function Register() {
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    register(formValue.email, formValue.password).then((res) => {
-      navigate("/sign-in", { replace: true });
+    register(formValue.email, formValue.password)
+      .then((res) => {
+        navigate("/sign-in", { replace: true });
+    })
+    .catch((err) => {
+      console.log(`Ошибка в Register, handleSubmit: ${err}`);
     });
   }
 
@@ -62,6 +66,7 @@ function Register() {
           placeholder="Email"
           value={formValue.email}
           onChange={handleChange}
+          required
         />
         <input
           id="password"
@@ -71,6 +76,7 @@ function Register() {
           placeholder="Password"
           value={formValue.password}
           onChange={handleChange}
+          required
         />
       </Authorization>
     </>
