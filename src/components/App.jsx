@@ -9,15 +9,15 @@ import AddPlacePopup from "./AddPlacePopup";
 // components-authorization
 import Login from "./Login";
 import Register from "./Register";
+import InfoTooltip from "./InfoTooltip";
 
 // react and utils
 import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
 import React from "react";
 import { api } from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
-import { checkToken } from "../utils/auth";
+import { checkToken, login, register } from "../utils/auth";
 import ProtectedRoute from "./ProtectedRoute";
-import InfoTooltip from "./InfoTooltip";
 
 // function App
 function App() {
@@ -43,6 +43,56 @@ function App() {
     setLoggedIn(true);
   }
 
+  // // регистрация
+  // function registerUser({email, password}) {
+  //   register(email, password)
+  //   .then(({token})=> {
+  //     localStorage.setItem('jwt', token);
+  //     setToken(token);
+  //     isSetSuccess(true);
+  //     navigate('/sign-in', {replace: true});
+  //   })
+  //   .catch((err) => {
+  //     console.log(`Ошибка в App, registerUser: ${err}`);
+  //   });
+  // }
+
+  // React.useEffect(() => {
+	// 	if (!token) {
+	// 		return;
+	// 	}
+	// }, [token]);
+
+  // React.useEffect(() => {
+  //   if(localStorage.getItem('jwt')) {
+  //     const token = localStorage.getItem('jwt');
+  //     checkToken(token)
+  //     .then((res) => {
+  //       const data = res.data;
+  //       setCurrentUserEmail(data.email);
+  //       setLoggedIn(true);
+  //       navigate('/main')
+  //     })
+  //     .catch((err) => {
+  //       console.log(`Ошибка в App, useEffect: ${err}`);
+  //     });
+  //   }
+  // }, [])
+
+  // function loginUser({email, password}) {
+  //   login(email, password)
+  //   .then(({token}) => {
+  //     localStorage.setItem('jwt', token);
+  //     setToken(token);
+  //     setCurrentUser(email);
+  //     setLoggedIn(true);
+  //     navigate('/main');
+  //   })
+  //   .catch((err) => {
+  //     console.log(`Ошибка в App, loginUser: ${err}`);
+  //   });
+  // }
+
   // проверка токена эффект
   React.useEffect(() => {
     handleTokenCheck();
@@ -55,7 +105,7 @@ function App() {
       checkToken(jwt)
         .then((res) => {
           if (res) {
-            setLoggedIn(true);
+            setLoggedIn(true)
             navigate("/main", { replace: true });
           }
         })
@@ -112,7 +162,7 @@ function App() {
       });
   }
 
-  // запрос обнолвения аватара
+  // запрос обновления аватара
   function handleUpdateAvatar(data) {
     api
       .editUserAvatar(data)
@@ -179,6 +229,7 @@ function App() {
       });
   }, []);
 
+
   return (
     <CurrentUserContext.Provider value={currentUser || ""}>
       <div className="root">
@@ -186,9 +237,16 @@ function App() {
           <Routes>
             <Route
               path="/sign-in"
-              element={<Login handleLogin={handleLogin} />}
+              element={
+                <Login 
+                />}
             />
-            <Route path="/sign-up" element={<Register />} />
+            <Route 
+              path="/sign-up" 
+              element={
+                <Register 
+                />} 
+            />
             <Route
               path="*"
               element={
@@ -212,6 +270,7 @@ function App() {
                       onCardClick={handleCardClick}
                       onCardLike={handleCardLike}
                       onCardDelete={handleCardDelete}
+                      loggedIn={loggedIn}
                     />
                   }
                 />
@@ -242,7 +301,6 @@ function App() {
           <InfoTooltip
             isOpen={isInfoTooltipPopupOpen}
             onClose={closeAllPopups}
-            isSuccess={handleInfoTooltipOpen}
           />
         </div>
       </div>
