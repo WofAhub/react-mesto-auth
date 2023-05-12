@@ -20,24 +20,28 @@ function Register() {
     });
   }
 
-  function handleSubmit(evt) {
-    evt.preventDefault();
-    register(formValue.email, formValue.password)
+  const handleSubmit = (e) => {
+    e.preventDefault();
+      const { email, password } = formValue;
+      register( email, password )
       .then((res) => {
-        navigate("/sign-in", { replace: true });
-    })
-    .catch((err) => {
-      console.log(`Ошибка в Register, handleSubmit: ${err}`);
-    });
-  }
+        navigate('/sign-in', {replace: true});
+      })
+      .catch((err) => {
+        console.log(`Ошибка в Register, handleSubmit: ${err}`);
+      });
+  } 
 
   return (
     <>
-      <Header headerButton={
-        <Link 
-          to='/sign-in'
-          className="button button_type_header"
-        >Вход</Link>} 
+      <Header 
+        headerButton={
+          <Link 
+            to='/sign-in'
+            className="button button_type_header"
+          >
+            Вход
+          </Link>} 
       />
       <Authorization
         title={"Регистрация"}
