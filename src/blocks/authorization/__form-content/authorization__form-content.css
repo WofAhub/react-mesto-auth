@@ -7,14 +7,16 @@
   min-width: 358px;
   min-height: 461px;
 
+ 
+
   /* Отступы */
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
 }
 
 @media screen and (max-width: 568px) {
   .authorization__form-content {
     min-width: 260px;
-    min-height: 404px;
+    max-height: 404px;
   }
 }

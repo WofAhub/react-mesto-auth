@@ -4,7 +4,7 @@ import Authorization from "./Authorization";
 import Header from "./Header";
 import useForm from "./hooks/useForm";
 
-function Register({onRegister}) {
+function Register({onRegister, onInfoTooltipClick}) {
   const {formValue, handleChange} = useForm({
     email: "",
     password: ""
@@ -13,6 +13,7 @@ function Register({onRegister}) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onRegister(formValue);
+    onInfoTooltipClick()
   } 
 
   return (

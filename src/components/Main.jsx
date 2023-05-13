@@ -3,6 +3,7 @@ import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Header from "./Header";
 import { Link } from "react-router-dom";
+import Footer from "./Footer";
 
 function Main({ 
   cards, 
@@ -72,6 +73,8 @@ function Main({
             )
           })}
         </section>
+
+        <Footer />
       </main>
     </>
   )

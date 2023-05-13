@@ -9,7 +9,7 @@ import AddPlacePopup from "./AddPlacePopup";
 // components-authorization
 import Login from "./Login";
 import Register from "./Register";
-// import InfoTooltip from "./InfoTooltip";
+import InfoTooltip from "./InfoTooltip";
 
 // react and utils
 import { Route, Routes, useNavigate, Navigate } from "react-router-dom";
@@ -21,26 +21,27 @@ import ProtectedRoute from "./ProtectedRoute";
 
 // function App
 function App() {
-  // const popups
+  // const попапы
   const [isEditAvatarPopupOpen, isSetEditAvatarPopupOpen] =
     React.useState(false);
   const [isEditProfilePopupOpen, isSetEditProfilePopupOpen] =
     React.useState(false);
   const [isAddPlacePopupOpen, isSetAddPlacePopupOpen] = React.useState(false);
+  const [isInfoTooltipPopupOpen, isSetInfoTooltipPopupOpen] = React.useState(false);
 
   // const api
   const [selectedCard, setSelectedCard] = React.useState({});
   const [currentUser, setCurrentUser] = React.useState({});
   const [cards, setCards] = React.useState([]);
 
-  // const authorization (авторизация)
+  // const авторизация
   const [isloggedIn, setLoggedIn] = React.useState(false);
   const [token, setToken] = React.useState('')
   const [userData, setUserData] = React.useState({
     email: ''
   })
-  // const [isInfoTooltipPopupOpen, isSetInfoTooltipPopupOpen] = React.useState(false);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [isSuccess, setIsSuccess] = React.useState(false);
   const navigate = useNavigate();
 
   React.useEffect(() => {
@@ -48,6 +49,7 @@ function App() {
     setToken(jwt);
   }, []);
 
+  // получить конткент
   React.useEffect(() => {
     if (!token) {
       return;
@@ -65,31 +67,38 @@ function App() {
       .finally(() => {
         setIsLoading(false);
       })
-  }, [token, navigate])
+  }, [token])
 
+  // регистрация
   function registerUser({ email, password }) {
-    auth.register(email, password)
+    auth
+      .register(email, password)
       .then((res) => {
         localStorage.setItem("jwt", res.jwt);
         setToken(res.jwt);
+        setIsSuccess(true);
         navigate('/sign-in', { replace: true });
       })
       .catch((err) => {
-        console.log(`Ошибка в App, register: ${err}`);
+        console.log(`Ошибка в App, registerUser: ${err}`);
+        setIsSuccess(false);
       });
   }
 
+  // логин
   function loginUser({ email, password }) {
     auth.login(email, password)
       .then((res) => {
         localStorage.setItem("jwt", res.jwt);
         setToken(res.jwt);
+        navigate('/main', { replace: true });
       })
       .catch((err) => {
-        console.log(`Ошибка в App, login: ${err}`);
+        console.log(`Ошибка в App, loginUser: ${err}`);
       });
   }
 
+  // разлогин
   function logOut() {
     localStorage.removeItem("jwt");
     setLoggedIn(false);
@@ -101,6 +110,10 @@ function App() {
     navigate("/sign-in");
   };
 
+  // попап информации о регистрации
+  function handleInfoTooltipPopupClick() {
+    isSetInfoTooltipPopupOpen(true)
+  }
 
   // смена аватара
   function handleEditAvatarClick() {
@@ -127,7 +140,7 @@ function App() {
     isSetEditAvatarPopupOpen(false);
     isSetEditProfilePopupOpen(false);
     isSetAddPlacePopupOpen(false);
-    // isSetInfoTooltipPopupOpen(false);
+    isSetInfoTooltipPopupOpen(false);
     setSelectedCard({});
   }
 
@@ -232,6 +245,7 @@ function App() {
               element={
                 <Register
                   onRegister={registerUser}
+                  onInfoTooltipClick={handleInfoTooltipPopupClick}
                 />}
             />
             <Route
@@ -265,7 +279,6 @@ function App() {
             />
           </Routes>
 
-          <Footer />
           <EditProfilePopup
             isOpen={isEditProfilePopupOpen}
             onClose={closeAllPopups}
@@ -284,6 +297,11 @@ function App() {
           <ImagePopup
             card={selectedCard}
             onClose={closeAllPopups}
+          />
+          <InfoTooltip
+            isOpen={isInfoTooltipPopupOpen}
+            onClose={closeAllPopups}
+            isSuccess={isSuccess}
           />
         </div>
       </div>

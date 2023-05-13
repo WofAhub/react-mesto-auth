@@ -49,6 +49,9 @@
 @import url(./blocks/pop-up/__img-container/pop-up__img-container.css);
 @import url(./blocks/pop-up/__img-caption/pop-up__img-caption.css);
 @import url(./blocks/pop-up/__img/pop-up__img.css);
+@import url(./blocks/pop-up/__infotooltip-img/pop-up__infotooltip-img.css);
+@import url(./blocks/pop-up/__container/_type/_infootooltip/pop-up__container_type_infootooltip.css);
+@import url(./blocks/pop-up/__infotooltip-caption/pop-up__infotooltip-caption.css);
 
 @import url(./blocks/footer/footer.css);
 @import url(./blocks/footer/__copyright/footer__copyright.css);
