@@ -1,35 +1,18 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import Authorization from "./Authorization";
 import Header from "./Header";
-import { register } from "../utils/auth";
+import useForm from "./hooks/useForm";
 
-function Register() {
-  const [formValue, setFormValue] = useState({
+function Register({onRegister}) {
+  const {formValue, handleChange} = useForm({
     email: "",
     password: ""
-  });
-  const navigate = useNavigate();
-
-  function handleChange(evt) {
-    const { name, value } = evt.target;
-
-    setFormValue({
-      ...formValue,
-      [name]: value
-    });
-  }
+  })
 
   const handleSubmit = (e) => {
     e.preventDefault();
-      const { email, password } = formValue;
-      register( email, password )
-      .then((res) => {
-        navigate('/sign-in', {replace: true});
-      })
-      .catch((err) => {
-        console.log(`Ошибка в Register, handleSubmit: ${err}`);
-      });
+    onRegister(formValue);
   } 
 
   return (

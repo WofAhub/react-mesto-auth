@@ -1,51 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import Authorization from "./Authorization";
 import Header from "./Header";
-import { login } from "../utils/auth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import useForm from "./hooks/useForm";
 
-function Login({handleLogin}) {
-  const [formValue, setFormValue] = useState({
+function Login({ onLogin }) {
+  const {formValue, handleChange} = useForm({
     email: "",
     password: ""
-  });
-  const navigate = useNavigate();
-
-  function handleChange(evt) {
-    const { name, value } = evt.target;
-
-    setFormValue({
-      ...formValue,
-      [name]: value
-    });
-  }
+  })
 
   function handleSubmit(evt) {
     evt.preventDefault();
-    if(!formValue.email || !formValue.password) {
-      return;
-    }
-    login(formValue.email, formValue.password)
-      .then((res) => {
-        if (res.token) {
-          setFormValue({ email: "", password: "" });
-          handleLogin();
-          navigate("/main", { replace: true });
-        }
-      })
-      .catch((err) => {
-        console.log(`Ошибка в Login, handleSubmit: ${err}`);
-      });
+    onLogin(formValue)
   }
 
   return (
     <>
       <Header headerButton={
-        <Link 
+        <Link
           to='/sign-up'
           className="button button_type_header"
         >Регистрация</Link>
-      } 
+      }
       />
       <Authorization
         title={"Вход"}
