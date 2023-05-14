@@ -100,11 +100,11 @@ function App() {
   // логин
   function loginUser({ email, password }) {
     auth.login(email, password)
-      .then((res) => {
-        localStorage.setItem("jwt", res.token);
-        setToken(res.token);
+      .then((token) => {
+        localStorage.setItem("jwt", token);
+        setToken(token);
         setUserData(email);
-        navigate('/main', { replace: true });
+        navigate('/', { replace: true });
       })
       .catch((err) => {
         console.log(`Ошибка в App, loginUser: ${err}`);
@@ -112,16 +112,17 @@ function App() {
   }
 
   // разлогин
-  // function logOut() {
-  //   localStorage.removeItem("jwt");
-  //   setLoggedIn(false);
-  //   setToken("");
-  //   setUserData({
-  //     email: "",
-  //     password: ""
-  //   });
-  //   navigate("/sign-in");
-  // };
+  function logOut() {
+    localStorage.removeItem("jwt");
+    setLoggedIn(false);
+    setToken("");
+    setUserData({
+      email: "",
+      password: ""
+    });
+    navigate("/sign-in");
+  };
+
 
   // попап информации о регистрации
   function handleInfoTooltipPopupClick() {
@@ -237,9 +238,6 @@ function App() {
       });
   }, []);
 
-  if (isLoading) {
-    return <div>Загрузка...</div>
-  }
 
   return (
     <CurrentUserContext.Provider value={currentUser || ""}>
@@ -285,7 +283,7 @@ function App() {
                   onCardClick={handleCardClick}
                   onCardLike={handleCardLike}
                   onCardDelete={handleCardDelete}
-            
+
                   userData={userData}
                 />
               }
