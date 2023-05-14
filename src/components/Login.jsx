@@ -20,7 +20,7 @@ function Login({ onLogin }) {
       <Header headerButton={
         <Link
           to='/sign-up'
-          className="button button_type_header"
+          className="button button_header"
         >Регистрация</Link>
       }
       />

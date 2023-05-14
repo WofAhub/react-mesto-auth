@@ -17,9 +17,11 @@ import { api } from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import * as auth from '../utils/auth.js';
 import ProtectedRoute from "./ProtectedRoute";
+import Footer from "./Footer";
 
 // function App
 function App() {
+
   // const попапы
   const [isEditAvatarPopupOpen, isSetEditAvatarPopupOpen] =
     React.useState(false);
@@ -36,10 +38,7 @@ function App() {
   // const авторизация
   const [isloggedIn, setLoggedIn] = React.useState(false);
   const [token, setToken] = React.useState('')
-  const [userData, setUserData] = React.useState({
-    _id: '',
-    email: ''
-  })
+  const [userData, setUserData] = React.useState('')
   const [isLoading, setIsLoading] = React.useState(true);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const navigate = useNavigate();
@@ -57,7 +56,7 @@ function App() {
     auth
       .getContent(token)
       .then((res) => {
-        setUserData(res);
+        setUserData(res.data.email);
         setLoggedIn(true);
         navigate('/', { replace: true });
       })
@@ -111,19 +110,6 @@ function App() {
       });
   }
 
-  // разлогин
-  function logOut() {
-    localStorage.removeItem("jwt");
-    setLoggedIn(false);
-    setToken("");
-    setUserData({
-      email: "",
-      password: ""
-    });
-    navigate("/sign-in");
-  };
-
-
   // попап информации о регистрации
   function handleInfoTooltipPopupClick() {
     isSetInfoTooltipPopupOpen(true)
@@ -149,7 +135,6 @@ function App() {
     setSelectedCard(card);
   }
 
-  // закрыть все попапы
   function closeAllPopups() {
     isSetEditAvatarPopupOpen(false);
     isSetEditProfilePopupOpen(false);
@@ -157,6 +142,22 @@ function App() {
     isSetInfoTooltipPopupOpen(false);
     setSelectedCard({});
   }
+
+  // закрыть все попапы
+  function closeAllPopupsByClickAndOverlay(evt) {
+    if (evt.target.classList.contains('pop-up_type_overlay')) {
+      closeAllPopups();
+    } else if(evt.target.classList.contains('button_type_close-button')) {
+      closeAllPopups();
+    }
+  }
+
+  // // заркыть по нажатию на оверлей
+  // function handleCloseByOverlay(evt){
+  //   if (evt.target.classList.contains('pop-up_type_overlay')) {
+  //     closeAllPopups();
+  //   }
+  // }
 
   // запрос обновления информации юзера
   function handleUpdateUser(data) {
@@ -238,84 +239,93 @@ function App() {
       });
   }, []);
 
+  // разлогин
+  function logOutUser() {
+    localStorage.removeItem("jwt");
+    setLoggedIn(false);
+    setToken("");
+    setUserData("");
+    navigate('/sign-in', { replace: true });
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser || ""}>
-      <div className="root">
-        <div className="page">
-          <Routes>
-            <Route
-              path="/sign-in"
-              element={
-                <Login
-                  onLogin={loginUser}
-                />}
-            />
-            <Route
-              path="/sign-up"
-              element={
-                <Register
-                  onRegister={registerUser}
-                  onInfoTooltipClick={handleInfoTooltipPopupClick}
-                />}
-            />
-            <Route
-              path="*"
-              element={
-                isloggedIn ? (
-                  <Navigate to="/" replace />
-                ) : (
-                  <Navigate to="/sign-up" replace />
-                )
-              }
-            />
-            <Route
-              path="/"
-              element={
-                <ProtectedRoute
-                  loggedIn={isloggedIn}
-                  element=
-                  {Main}
-                  cards={cards}
-                  onEditAvatar={handleEditAvatarClick}
-                  onEditProfile={handleEditProfileClick}
-                  onAddPlace={handleAddPlaceClick}
-                  onCardClick={handleCardClick}
-                  onCardLike={handleCardLike}
-                  onCardDelete={handleCardDelete}
+        <div className="root">
+          <div className="page">
+            <Routes>
+              <Route
+                path="/sign-in"
+                element={
+                  <Login
+                    onLogin={loginUser}
+                  />}
+              />
+              <Route
+                path="/sign-up"
+                element={
+                  <Register
+                    onRegister={registerUser}
+                    onInfoTooltipClick={handleInfoTooltipPopupClick}
+                  />}
+              />
+              <Route
+                path="*"
+                element={
+                  isloggedIn ? (
+                    <Navigate to="/" replace />
+                  ) : (
+                    <Navigate to="/sign-up" replace />
+                  )
+                }
+              />
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute
+                    loggedIn={isloggedIn}
+                    element=
+                    {Main}
+                    cards={cards}
+                    onEditAvatar={handleEditAvatarClick}
+                    onEditProfile={handleEditProfileClick}
+                    onAddPlace={handleAddPlaceClick}
+                    onCardClick={handleCardClick}
+                    onCardLike={handleCardLike}
+                    onCardDelete={handleCardDelete}
+                    logOut={logOutUser}
+                    userData={userData}
+                  />
+                }
+              />
+            </Routes>
 
-                  userData={userData}
-                />
-              }
+            <EditProfilePopup
+              isOpen={isEditProfilePopupOpen}
+              onClose={closeAllPopupsByClickAndOverlay}
+              onUpdateUser={handleUpdateUser}
             />
-          </Routes>
-
-          <EditProfilePopup
-            isOpen={isEditProfilePopupOpen}
-            onClose={closeAllPopups}
-            onUpdateUser={handleUpdateUser}
-          />
-          <EditAvatarPopup
-            isOpen={isEditAvatarPopupOpen}
-            onClose={closeAllPopups}
-            onUpdateAvatar={handleUpdateAvatar}
-          />
-          <AddPlacePopup
-            isOpen={isAddPlacePopupOpen}
-            onClose={closeAllPopups}
-            onAddPlace={handleAddPlace}
-          />
-          <ImagePopup
-            card={selectedCard}
-            onClose={closeAllPopups}
-          />
-          <InfoTooltip
-            isOpen={isInfoTooltipPopupOpen}
-            onClose={closeAllPopups}
-            isSuccess={isSuccess}
-          />
+            <EditAvatarPopup
+              isOpen={isEditAvatarPopupOpen}
+              onClose={closeAllPopupsByClickAndOverlay}
+              onUpdateAvatar={handleUpdateAvatar}
+            />
+            <AddPlacePopup
+              isOpen={isAddPlacePopupOpen}
+              onClose={closeAllPopupsByClickAndOverlay}
+              onAddPlace={handleAddPlace}
+            />
+            <ImagePopup
+              card={selectedCard}
+              onClose={closeAllPopupsByClickAndOverlay}
+            />
+            <InfoTooltip
+              isOpen={isInfoTooltipPopupOpen}
+              onClose={closeAllPopupsByClickAndOverlay}
+              isSuccess={isSuccess}
+            />
+            <Footer />
+          </div>
         </div>
-      </div>
     </CurrentUserContext.Provider>
   );
 }

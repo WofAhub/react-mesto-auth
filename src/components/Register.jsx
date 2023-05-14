@@ -22,7 +22,7 @@ function Register({onRegister, onInfoTooltipClick}) {
         headerButton={
           <Link 
             to='/sign-in'
-            className="button button_type_header"
+            className="button button_header"
           >
             Вход
           </Link>} 

@@ -11,7 +11,6 @@ function Authorization({
     <div className="root">
       <div className="page">
         <main className="content">
-        
             <div className="authorization__form-content">
               <div className="authorization__form-box">
                 <h1 className="authorization__heading">{title}</h1>
@@ -26,7 +25,6 @@ function Authorization({
               </div>
               {registerChildren}
             </div>
-         
         </main>
       </div>
     </div>

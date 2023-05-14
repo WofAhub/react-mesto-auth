@@ -1,0 +1,7 @@
+@media screen and (max-width: 568px) {
+  .content_auth_backgroung-height {
+    height: 100vh;
+    padding: 0;
+    margin: 0 auto;
+  }
+}

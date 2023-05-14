@@ -2,34 +2,36 @@ import React from "react";
 import Card from "./Card";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import Header from "./Header";
-import { Link } from "react-router-dom";
 import Footer from "./Footer";
 
-function Main({ 
-  cards, 
-  onEditAvatar, 
-  onCardClick, 
-  onCardLike, 
-  onCardDelete, 
-  onEditProfile, 
+function Main({
+  cards,
+  onEditAvatar,
+  onCardClick,
+  onCardLike,
+  onCardDelete,
+  onEditProfile,
   onAddPlace,
-  userData 
+  logOut,
+  userData
 }) {
   const currentUserContext = React.useContext(CurrentUserContext)
 
   return (
     <>
       <Header
-        userData={
+        email={
           <p className='header__user-email'>{userData}</p>
         }
         headerButton={
-          <Link
-            to='/sign-in'
-            className="button button_type_header"
+          <button
+            type='button'
+            onClick={logOut}
+            className="button button_header button_header_main"
           >
             Выход
-          </Link>}
+          </button>
+        }
       />
       <main className="content">
         <section className="profile">
@@ -72,7 +74,6 @@ function Main({
           })}
         </section>
 
-        <Footer />
       </main>
     </>
   )

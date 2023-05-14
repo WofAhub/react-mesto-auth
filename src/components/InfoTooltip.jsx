@@ -4,16 +4,10 @@ import fail from '../images/Fail.png';
 
 function InfoTooltip({ isSuccess, onClose, isOpen }) {
 
-  function handleCloseByOverlay(evt){
-    if (evt.target.classList.contains('pop-up_type_overlay')) {
-      onClose();
-    }
-  }
-
   return (
     <div 
       className={`pop-up pop-up_type_infotooltip pop-up_type_overlay ${isOpen ? 'pop-up_type_active' : ''}`}
-      onClick={handleCloseByOverlay}
+      onClick={onClose}
     >
       <div className="pop-up__container pop-up__container_type_infootooltip">
         <button

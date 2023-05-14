@@ -2,7 +2,10 @@ import React from "react"
 
 function ImagePopup({card, onClose}) {
   return(
-    <div className={`pop-up pop-up_type_img pop-up_type_overlay ${Object.keys(card).length !==0 ? 'pop-up_type_active' : ''}`}>
+    <div 
+      className={`pop-up pop-up_type_img pop-up_type_overlay ${Object.keys(card).length !==0 ? 'pop-up_type_active' : ''}`}
+      onClick={onClose}
+      >
       <figure className="pop-up__img-container">
 
         <button
