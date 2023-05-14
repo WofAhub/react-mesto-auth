@@ -39,7 +39,6 @@ function App() {
   const [isloggedIn, setLoggedIn] = React.useState(false);
   const [token, setToken] = React.useState('')
   const [userData, setUserData] = React.useState('')
-  const [isLoading, setIsLoading] = React.useState(true);
   const [isSuccess, setIsSuccess] = React.useState(false);
   const navigate = useNavigate();
 
@@ -62,9 +61,6 @@ function App() {
       })
       .catch((err) => {
         console.log(`Ошибка в App, useEffect2: ${err}`);
-      })
-      .finally(() => {
-        setIsLoading(false);
       })
   }, [token])
 
