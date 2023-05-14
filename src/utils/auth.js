@@ -36,8 +36,9 @@ export const login = (email, password) => {
         .then((response => response.json()))
         .then((data) => {
             if (data.token) {
-                localStorage.setItem("token", data.token);
-                return data.token;
+                const token = data.token;
+                localStorage.setItem("jwt", data.token);
+                return token;
             }
         })
         .catch(err => console.log(err))
@@ -47,6 +48,7 @@ export const getContent = (token) => {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         headers: {
+            'Accept': 'application/json',
             "Content-Type": "application/json",
             "Authorization": `Bearer ${token}`
         },

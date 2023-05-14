@@ -1,6 +1,5 @@
 // components
 import Main from "./Main";
-import Footer from "./Footer";
 import EditProfilePopup from "./EditProfilePopup";
 import ImagePopup from "./ImagePopup";
 import EditAvatarPopup from "./EditAvatarPopup";
@@ -38,6 +37,7 @@ function App() {
   const [isloggedIn, setLoggedIn] = React.useState(false);
   const [token, setToken] = React.useState('')
   const [userData, setUserData] = React.useState({
+    _id: '',
     email: ''
   })
   const [isLoading, setIsLoading] = React.useState(true);
@@ -49,7 +49,7 @@ function App() {
     setToken(jwt);
   }, []);
 
-  // получить конткент
+  // получить контент
   React.useEffect(() => {
     if (!token) {
       return;
@@ -59,7 +59,7 @@ function App() {
       .then((res) => {
         setUserData(res);
         setLoggedIn(true);
-        navigate('/main', { replace: true });
+        navigate('/', { replace: true });
       })
       .catch((err) => {
         console.log(`Ошибка в App, useEffect2: ${err}`);
@@ -73,9 +73,7 @@ function App() {
   function registerUser({ email, password }) {
     auth
       .register(email, password)
-      .then((res) => {
-        localStorage.setItem("jwt", res.jwt);
-        setToken(res.jwt);
+      .then(() => {
         setIsSuccess(true);
         navigate('/sign-in', { replace: true });
       })
@@ -85,12 +83,27 @@ function App() {
       });
   }
 
+  React.useEffect(() => {
+    if (isInfoTooltipPopupOpen && isSuccess) {
+      setTimeout(() => {
+        closeAllPopups();
+      }, 1200);
+
+      setTimeout(() => {
+        setIsSuccess(false);
+      }, 1500);
+    };
+
+    return () => clearTimeout(setTimeout);
+  }, [isInfoTooltipPopupOpen, isSuccess, closeAllPopups, setIsSuccess]);
+
   // логин
   function loginUser({ email, password }) {
     auth.login(email, password)
       .then((res) => {
-        localStorage.setItem("jwt", res.jwt);
-        setToken(res.jwt);
+        localStorage.setItem("jwt", res.token);
+        setToken(res.token);
+        setUserData(email);
         navigate('/main', { replace: true });
       })
       .catch((err) => {
@@ -99,16 +112,16 @@ function App() {
   }
 
   // разлогин
-  function logOut() {
-    localStorage.removeItem("jwt");
-    setLoggedIn(false);
-    setToken("");
-    setUserData({
-      email: "",
-      password: ""
-    });
-    navigate("/sign-in");
-  };
+  // function logOut() {
+  //   localStorage.removeItem("jwt");
+  //   setLoggedIn(false);
+  //   setToken("");
+  //   setUserData({
+  //     email: "",
+  //     password: ""
+  //   });
+  //   navigate("/sign-in");
+  // };
 
   // попап информации о регистрации
   function handleInfoTooltipPopupClick() {
@@ -252,16 +265,17 @@ function App() {
               path="*"
               element={
                 isloggedIn ? (
-                  <Navigate to="/main" replace />
+                  <Navigate to="/" replace />
                 ) : (
                   <Navigate to="/sign-up" replace />
                 )
               }
             />
             <Route
-              path="/main"
+              path="/"
               element={
                 <ProtectedRoute
+                  loggedIn={isloggedIn}
                   element=
                   {Main}
                   cards={cards}
@@ -271,8 +285,7 @@ function App() {
                   onCardClick={handleCardClick}
                   onCardLike={handleCardLike}
                   onCardDelete={handleCardDelete}
-                  isloggedIn={isloggedIn}
-                  logOut={logOut}
+            
                   userData={userData}
                 />
               }

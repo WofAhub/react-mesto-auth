@@ -12,8 +12,7 @@ function Main({
   onCardLike, 
   onCardDelete, 
   onEditProfile, 
-  onAddPlace, 
-  logOut, 
+  onAddPlace,
   userData 
 }) {
   const currentUserContext = React.useContext(CurrentUserContext)
@@ -26,8 +25,7 @@ function Main({
         }
         headerButton={
           <Link
-            href="#"
-            logOut={logOut}
+            to='/sign-in'
             className="button button_type_header"
           >
             Выход

@@ -11,6 +11,6 @@
     /* Экран */
     max-width: 282px;
     /* Отступы */
-    margin: 0 0 0 5.938%;
+    margin: 0 auto 0 auto;
   }
 }
