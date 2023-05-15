@@ -45,6 +45,8 @@ function Register({onRegister, onInfoTooltipClick}) {
             </Link>
           </div>
         }
+        idAuth={'form-reg'}
+        name={'reg-auth'}
       >
         <input
           id="email"

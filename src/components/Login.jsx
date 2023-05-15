@@ -28,6 +28,8 @@ function Login({ onLogin }) {
         title={"Вход"}
         buttonName={"Войти"}
         onSubmit={handleSubmit}
+        idAuth={'form-log'}
+        name={'log-auth'}
       >
         <input
           id="email"

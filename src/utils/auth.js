@@ -4,9 +4,9 @@ function checkAnswerFromServer(res) {
     if (res.ok) {
         return res.json();
     } else {
-        Promise.reject(`Ошибка: ${res.status}`);
-    };
-};
+        return Promise.reject(`Ошибка: ${res.status}`);
+    }
+}
 
 export const register = (email, password) => {
     return fetch(`${BASE_URL}/signup`, {
@@ -17,7 +17,7 @@ export const register = (email, password) => {
         },
         body: JSON.stringify({ email, password })
     })
-        .then(res => checkAnswerFromServer(res));
+        .then(res => checkAnswerFromServer(res))
 }
 
 
@@ -51,5 +51,5 @@ export const getContent = (token) => {
         },
     })
         .then(res => checkAnswerFromServer(res))
-        .then(data => data)
+       
 };

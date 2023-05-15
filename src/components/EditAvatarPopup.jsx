@@ -23,6 +23,8 @@ function EditAvatarPopup({onUpdateAvatar, isOpen, onClose}) {
       onClose={onClose}
       onSubmit={handleSubmit}
       buttonName={'Обновить'}
+      id={'form-avatar'}
+      nameForm={'avatar'}
     >
       <input
         id="input-avatar-url"

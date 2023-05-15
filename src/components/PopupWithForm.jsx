@@ -1,12 +1,16 @@
 import React from "react";
 
-function PopupWithForm ({title, name, buttonName, children, isOpen, onClose, onSubmit}) {
-
-  // function handleCloseByOverlay(evt){
-  //   if (evt.target.classList.contains('pop-up_type_overlay')) {
-  //     onClose();
-  //   }
-  // }
+function PopupWithForm ({
+  title, 
+  name, 
+  buttonName, 
+  children, 
+  isOpen, 
+  onClose, 
+  onSubmit,
+  id, 
+  nameForm
+}) {
   
   return (
     <section
@@ -28,8 +32,8 @@ function PopupWithForm ({title, name, buttonName, children, isOpen, onClose, onS
         </p>
   
         <form
-          id="form"
-          name="pop-up-form"
+          id={id}
+          name={nameForm}
           className={`pop-up__form pop-up__form_type_${name}`}
           noValidate
           onSubmit={onSubmit}

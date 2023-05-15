@@ -17,7 +17,6 @@ import { api } from "../utils/Api";
 import { CurrentUserContext } from "../contexts/CurrentUserContext";
 import * as auth from '../utils/auth.js';
 import ProtectedRoute from "./ProtectedRoute";
-import Footer from "./Footer";
 
 // function App
 function App() {
@@ -68,13 +67,16 @@ function App() {
   function registerUser({ email, password }) {
     auth
       .register(email, password)
-      .then(() => {
+      .then((res) => {
+        if(res) {
         setIsSuccess(true);
         navigate('/sign-in', { replace: true });
+        } else {
+          setIsSuccess(false);
+        }
       })
       .catch((err) => {
         console.log(`Ошибка в App, registerUser: ${err}`);
-        setIsSuccess(false);
       });
   }
 
@@ -147,13 +149,6 @@ function App() {
       closeAllPopups();
     }
   }
-
-  // // заркыть по нажатию на оверлей
-  // function handleCloseByOverlay(evt){
-  //   if (evt.target.classList.contains('pop-up_type_overlay')) {
-  //     closeAllPopups();
-  //   }
-  // }
 
   // запрос обновления информации юзера
   function handleUpdateUser(data) {
@@ -319,7 +314,6 @@ function App() {
               onClose={closeAllPopupsByClickAndOverlay}
               isSuccess={isSuccess}
             />
-            <Footer />
           </div>
         </div>
     </CurrentUserContext.Provider>

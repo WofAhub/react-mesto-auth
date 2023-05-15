@@ -73,7 +73,7 @@ function Main({
             )
           })}
         </section>
-
+        <Footer />
       </main>
     </>
   )
