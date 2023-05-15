@@ -1,10 +1,8 @@
 @import url(./vendor/normalize.css);
 @import url(./vendor/fonts/fonts.css);
 @import url(./blocks/page/page.css);
-@import url(./blocks/page/_auth/_backgroung-height/page_auth_backgroung-height.css);
 @import url(./blocks/root/root.css);
 @import url(./blocks/content/content.css);
-@import url(./blocks/content/_auth/_backgroung-height/content_auth_backgroung-height.css);
 
 @import url(./blocks/header/header.css);
 @import url(./blocks/header/__logo/header__logo.css);
